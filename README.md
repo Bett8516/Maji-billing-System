@@ -35,10 +35,10 @@ Copy `.env.example` to `.env.local` and fill in:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-ANTHROPIC_API_KEY=your-anthropic-api-key
+GEMINI_API_KEY=your-google-ai-studio-api-key
 ```
 
-The Anthropic key is only read by `/api/read-meter`; it is never exposed to the browser. The app uses a current Claude vision model. Meter images are resized in the browser before OCR and upload.
+The Google Gemini API key is only read by `/api/read-meter`; it is never exposed to the browser. Meter OCR uses Gemini 3.8 Flash, which supports images and has a free tier with usage limits. Google states that free-tier content may be used to improve its products. Meter images are resized in the browser before OCR and upload. See Google's current [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) and [data use terms](https://ai.google.dev/gemini-api/terms).
 
 ## 3. Run locally
 
