@@ -1,0 +1,2 @@
+"use client";
+export function PrintBill({index}:{index?:number}){function print(){const cards=[...document.querySelectorAll<HTMLElement>(".print-card")];cards.forEach((card,i)=>card.style.display=index===undefined||index===i?"block":"none");window.print();cards.forEach(card=>card.style.display="");}return <button onClick={print} className="no-print mt-4 rounded-lg border px-3 py-2 text-sm font-semibold" type="button">{index===undefined?"Print all bills":"Print this bill"}</button>}

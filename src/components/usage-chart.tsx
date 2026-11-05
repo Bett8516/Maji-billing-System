@@ -1,0 +1,2 @@
+"use client";
+export function UsageChart({data}:{data:{month:string;units:number}[]}){const max=Math.max(1,...data.map(x=>x.units));return <div className="mt-5"><div className="flex h-40 items-end gap-2">{data.map((x,i)=><div key={x.month} className="group flex h-full flex-1 flex-col justify-end"><div title={`${x.units} m³`} style={{height:`${Math.max(4,x.units/max*100)}%`}} className={`min-h-1 rounded-t-md ${i===data.length-1?"bg-cyan-700":"bg-cyan-200"}`}/><span className="mt-2 truncate text-center text-[10px] text-slate-500">{x.month}</span></div>)}</div></div>}
