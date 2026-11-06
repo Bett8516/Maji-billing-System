@@ -9,7 +9,7 @@ src/
   app/                 Pages, server actions and API routes
     admin/             Tariffs, meters, readings, billing and faults
     api/                Protected OCR and reading submission routes
-    auth/               Supabase phone/password auth actions
+    auth/               Supabase email/password auth actions
     dashboard/          Customer overview, bill history and faults
   components/            Customer forms, charts, Leaflet map and admin panels
   lib/                   Supabase clients, date and currency helpers
@@ -23,7 +23,7 @@ supabase/
 1. Create a project at [supabase.com](https://supabase.com) and select a region suitable for your Kenyan customers.
 2. In **SQL Editor**, run `supabase/migrations/202611050001_initial_schema.sql`.
 3. Run `supabase/seed.sql` to add three unassigned demo meters, a residential tariff with sample tiers, and demo readings for `MAJI-1001`.
-4. In **Authentication → Providers → Phone**, enable phone/password sign-in. For the included registration flow, turn off phone confirmation while testing. Before production, configure an SMS provider and add an OTP confirmation step to registration.
+4. The app uses Supabase's built-in **Email** provider; Phone can remain disabled, so no SMS provider or SMS charges are needed. For first-time testing, turn off **Confirm email** in **Authentication → Sign In / Providers → Email** so accounts are created immediately. Email confirmation is supported through `/auth/callback`; Supabase's built-in email sender is restricted and rate-limited, so configure custom SMTP before production email delivery.
 5. Copy the project URL and anon/publishable key from **Project Settings → API**.
 
 The seed meters are intentionally unassigned so that a customer account can claim one. Meter claiming is atomic and only works once. The demo readings are visible after the meter is assigned to an account.
@@ -49,7 +49,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Register with an E.164 phone number (for example `+2547…`) and one of the unassigned seed meter numbers. If SMS confirmation is enabled, finish phone confirmation before signing in; otherwise the account will be created and linked immediately.
+Open [http://localhost:3000](http://localhost:3000). Register with your email address, phone number (stored on your profile), and one of the unassigned seed meter numbers. With Confirm email off, the account and meter link are created immediately. If email confirmation is on, confirm the email to finish meter linking.
 
 To create an admin for development, register a separate account, then run this in the Supabase SQL editor using that account's auth UUID:
 
@@ -57,7 +57,7 @@ To create an admin for development, register a separate account, then run this i
 update public.profiles set role = 'admin' where id = 'AUTH_USER_UUID';
 ```
 
-Sign in with that phone and password; admins are redirected to `/admin`. The admin page can add/assign meters, manage tariffs, review readings, create monthly bills, and update fault reports.
+Sign in with that email and password; admins are redirected to `/admin`. The admin page can add/assign meters, manage tariffs, review readings, create monthly bills, and update fault reports.
 
 ## 4. Deploy to Vercel
 
@@ -65,7 +65,7 @@ Sign in with that phone and password; admins are redirected to `/admin`. The adm
 2. Add the three `.env.example` variables to the Vercel project environment settings.
 3. Deploy. Vercel detects Next.js automatically.
 4. In Supabase **Authentication → URL Configuration**, add the deployed domain to allowed redirect URLs.
-5. Confirm the `meter-photos` private Storage bucket exists (the migration creates it). Configure phone/SMS verification before production use.
+5. In Supabase **Authentication → URL Configuration**, allow the Vercel domain's `/auth/callback` URL. Confirm the `meter-photos` private Storage bucket exists (the migration creates it). Configure custom SMTP and enable email confirmations before production use.
 
 ## Billing and data notes
 
